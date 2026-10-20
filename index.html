@@ -1,0 +1,267 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"><meta name="theme-color" content="#101b2d"><title>マルゲッタちゃん VS 虎ピッチャー | Baseball V13.3</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#081120;font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;overflow:hidden}body{display:grid;place-items:center}
+.game{position:relative;width:min(100vw,calc(100dvh * .5625));height:min(100dvh,calc(100vw * 1.77778));overflow:hidden;background:#6aa8dc;box-shadow:0 0 45px #0009}
+canvas{display:block;width:100%;height:100%;touch-action:none;background:linear-gradient(#7dc4ff,#cdeeff 46%,#4a9951 46%,#4a9951)}
+.hud{position:absolute;inset:0 8px auto 8px;top:max(8px,env(safe-area-inset-top));display:flex;justify-content:space-between;gap:8px;color:#fff;pointer-events:none}
+.panel{flex:1;max-width:49%;padding:8px 10px;border-radius:14px;border:2px solid #d8e7ff88;background:linear-gradient(160deg,#18345add,#0a1730ef);box-shadow:0 4px 0 #02091588}
+.label{font-size:12px;font-weight:900;color:#ffdf68} .num{font-size:29px;font-weight:1000;font-variant-numeric:tabular-nums;line-height:1.15} .small{font-size:11px;color:#e7f2ff} .right{text-align:right}
+.nav{position:absolute;top:max(103px,calc(env(safe-area-inset-top) + 100px));right:8px;display:flex;gap:6px} .nav button{background:#0d1d36d9;color:#fff;border:1px solid #ffffff77;border-radius:10px;padding:9px 10px;font-size:16px;cursor:pointer}
+.outcome{position:absolute;left:0;right:0;top:28%;text-align:center;pointer-events:none;color:#fff7bb;font-size:44px;line-height:1.02;font-weight:1000;text-shadow:0 4px 0 #8f3609,0 8px 15px #000b;transform:rotate(-5deg);opacity:0;transition:opacity .15s} .outcome.visible{opacity:1} .outcome small{display:block;color:#fff;font-size:17px;margin-top:8px;text-shadow:0 2px 6px #000}
+.bottom{position:absolute;left:0;right:0;bottom:max(9px,env(safe-area-inset-bottom));display:flex;align-items:flex-end;flex-direction:column;gap:8px;pointer-events:none;padding-right:14px} .hint{max-width:148px;font-size:12px;line-height:1.3;color:#fff;font-weight:900;text-shadow:0 2px 6px #000;padding:10px 12px;text-align:center;white-space:normal;background:rgba(20,24,30,.62);border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.swing{pointer-events:auto;width:170px;max-width:170px;padding:13px 8px;border:3px solid #fff2a6;border-radius:999px;background:linear-gradient(#ffb832,#ed6b08);box-shadow:0 6px 0 #9b3907,0 12px 24px #0008;font-weight:1000;color:#fff;font-size:25px;text-shadow:0 2px #a74810;cursor:pointer} .swing:active{transform:translateY(4px);box-shadow:0 2px 0 #9b3907,0 3px 10px #0008}
+.version{font-size:9px;color:#f1f5fc;text-shadow:0 1px 3px #000}
+.veil{position:absolute;inset:0;background:linear-gradient(#091731aa,#050b18db);display:flex;align-items:center;justify-content:center;padding:10px;color:#fff;overflow:hidden}
+.dialog{height:min(96%,760px);max-height:96%;overflow-y:auto;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:10px;border:2px solid #ffe17f;background:linear-gradient(145deg,#223b63,#101c35 78%);border-radius:22px;width:100%;padding:14px 12px 16px;box-shadow:0 14px 35px #000a;text-align:center;scrollbar-width:thin}.poster{flex:0 0 auto;width:100%;display:block;object-fit:contain;object-position:center center;border-radius:16px;border:2px solid #ffffff33;box-shadow:0 8px 18px #0007;margin:2px 0 2px;max-height:52%;background:transparent}.dialog h1{flex:0 0 auto;color:#ffe273;font-size:clamp(20px,3.3dvh,27px);line-height:1.15;margin:0}.dialog p{flex:0 0 auto;font-size:clamp(12px,1.75dvh,15px);line-height:1.6;margin:0 0 6px}.dialog button{flex:0 0 auto;min-height:56px;position:relative;z-index:5;border:0;background:#ffca47;border-radius:16px;padding:14px;color:#1b283b;font-size:22px;font-weight:1000;width:100%;cursor:pointer;margin-top:4px}
+.hide{display:none} .pill{align-self:center;flex:0 0 auto;background:#ffd75c;color:#192137;border-radius:20px;font-size:12px;font-weight:1000;display:inline-block;padding:5px 13px;margin-bottom:8px}
+@media (max-height:640px){.dialog{height:99%;padding:8px;gap:7px}.dialog h1{font-size:18px;margin:0}.dialog p{font-size:11px;line-height:1.4;margin:0}.poster{max-height:40%;min-height:120px}.dialog button{min-height:44px;padding:8px;font-size:18px}.pill{margin-bottom:1px}.bottom .swing{padding:8px;font-size:20px}}
+
+.pitchBadge{position:absolute;top:159px;left:9px;background:#11263ce8;border:1px solid #ffe283a8;padding:7px 10px;color:#ffec9d;font-size:12px;font-weight:900;border-radius:10px;text-shadow:0 1px 3px #000;pointer-events:none}
+.difficulty{display:flex;gap:10px;justify-content:center;align-items:center;flex-shrink:0;color:#ffdf68;font-size:12px;font-weight:800;margin-top:5px}.difficulty select{font-weight:900;color:#162034;background:#fff7d9;padding:5px 14px;border-radius:9px;border:1px solid #ffe17f}
+.dialog{overflow-y:auto;justify-content:flex-start;gap:10px;scrollbar-width:thin}.dialog button{position:relative;bottom:auto;margin-top:4px}.poster{max-height:52%;min-height:160px;object-fit:contain}.dialog h1{margin:0}.dialog p{margin:0 0 6px}
+@media(max-height:640px){.pitchBadge{top:139px}.poster{max-height:42%;min-height:120px}.dialog h1{font-size:17px}.dialog p{font-size:11px;line-height:1.45}.dialog button{min-height:48px;font-size:19px}}
+
+/* Ver.11: glossy arcade scoreboard and right-side circle control */
+.panel{background:linear-gradient(145deg,#25364c 0%,#10151e 55%,#080d16 100%);
+ border:3px solid #f9b72d;border-radius:20px;box-shadow:inset 0 2px 0 #fff8bc,0 5px 0 #a04a09,0 9px 18px #0007}
+.panel .label{color:#ffe16b;text-shadow:0 2px 2px #000}
+.panel .num{color:#fffaf0;text-shadow:0 3px 0 #493d33}
+.nav button{border:2px solid #ffd15a;background:linear-gradient(#ff971e,#ed5709);
+ box-shadow:inset 0 2px 1px #fff7aa,0 4px 0 #923a0a;border-radius:14px}
+.pitchBadge{background:linear-gradient(130deg,#192332,#0a101b);border:2px solid #f9b62c;
+ border-radius:14px;color:#ffe88b;box-shadow:0 4px 0 #8a4209}
+.bottom{bottom:max(18px,env(safe-area-inset-bottom));align-items:flex-end;padding-right:14px;gap:6px}
+.swing{width:clamp(105px,30%,149px);height:auto;aspect-ratio:1/1;max-width:none;
+ border:5px solid #ffe680;border-radius:50%;background:radial-gradient(circle at 34% 20%,#ffda52,#ff8f0d 49%,#df4900 94%);
+ box-shadow:inset 0 4px 5px #fffbb3, inset 0 -8px 0 #a74209,0 7px 0 #813609,0 11px 23px #0008;
+ font-size:clamp(15px,4.3vw,21px);line-height:1.15;padding:15px 5px;white-space:normal}
+.swing:active{transform:translateY(4px);box-shadow:inset 0 4px 4px #fff3a0,0 3px 0 #813609}
+.hint{max-width:48%;font-size:11px;align-self:flex-end;text-align:center;background:#121923a8;padding:3px 7px;border-radius:8px}
+.version{font-size:8px;align-self:center}
+.outcome{top:29%;font-size:clamp(30px,9vw,44px);-webkit-text-stroke:1px #8b390e}
+@media(max-height:640px){.swing{width:102px;font-size:14px}.bottom{bottom:7px}.hint{font-size:10px}}
+
+#description{flex:0 0 auto;font-size:clamp(12px,1.75dvh,15px);line-height:1.6;margin:0 0 6px}
+.rewardWrap{margin-top:10px;padding:10px 10px 12px;border-radius:16px;background:linear-gradient(180deg,#3a2810,#1c1308);border:1px solid rgba(255,225,127,.45);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),0 8px 20px rgba(0,0,0,.28)}
+.rewardTitle{font-size:clamp(20px,3dvh,28px);font-weight:1000;color:#ffe48b;line-height:1.2;margin-bottom:4px;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.rewardSub{font-size:clamp(13px,1.8dvh,16px);font-weight:800;color:#fff6d0;margin-bottom:10px}
+.rewardPop{display:block;width:100%;max-width:420px;margin:0 auto;border-radius:18px;border:2px solid rgba(255,241,193,.55);box-shadow:0 10px 24px rgba(0,0,0,.35)}
+.rewardGuide{margin-top:10px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff2b0;font-weight:800}
+
+
+/* V14.7 reward by difficulty presentation */
+.dialog.result-screen .poster,.dialog.result-screen .difficulty{display:none!important}
+.dialog.result-screen{gap:7px;justify-content:flex-start}
+.dialog.result-screen #description{margin:0;line-height:1.35}
+.dialog.result-screen .rewardWrap{margin-top:8px;padding:10px 10px 12px;animation:rewardReveal .65s cubic-bezier(.18,.9,.22,1.2) both}
+.rewardWin{font-size:clamp(22px,3.7dvh,31px);font-weight:1000;color:#ffdf5c;text-shadow:0 2px 4px #5e2406,0 0 15px #ffad28;animation:rewardGlow 1.7s ease-in-out infinite alternate}
+.dialog.result-screen .rewardPop{max-height:min(35dvh,275px);object-fit:contain;width:auto;max-width:100%;margin:6px auto}
+.rewardScreenshot{margin-top:9px;padding:10px 7px;background:#fff4cb;color:#4b2b08;border-radius:10px;font-weight:1000;font-size:clamp(13px,2dvh,17px);line-height:1.45}
+.rewardSparkles{font-size:23px;letter-spacing:12px;animation:rewardGlow 1.1s ease-in-out infinite alternate}
+@keyframes rewardReveal{0%{opacity:0;transform:scale(.82) translateY(20px)}65%{opacity:1;transform:scale(1.04)}100%{opacity:1;transform:scale(1)}}
+@keyframes rewardGlow{from{filter:brightness(1)}to{filter:brightness(1.38)}}
+@media(max-height:650px){.dialog.result-screen .rewardPop{max-height:29dvh}.dialog.result-screen .rewardWrap{padding:5px}.rewardScreenshot{padding:6px;font-size:12px}}
+
+.resultMeta{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;column-gap:12px;row-gap:2px;margin:5px 0 7px;padding:6px 5px;border:1px solid #ffe4a260;border-radius:10px;background:#080f20a6;font-size:clamp(10px,1.55dvh,12px);line-height:1.35;color:#fff4c6;font-weight:800;font-variant-numeric:tabular-nums}
+.resultMeta span{white-space:nowrap}
+.result-screen .rewardWrap{margin-top:5px;padding:7px 7px 9px}
+.result-screen .rewardPop{max-width:280px;max-height:29dvh;width:auto;object-fit:contain}
+</style>
+<main class="game">
+<canvas id="screen" width="450" height="800"></canvas>
+<audio id="gameBgm" loop preload="auto" playsinline src="assets/audio_mpeg_1.mp3"></audio>
+<section class="hud"><div class="panel"><div class="label">🧡 マルゲッタ</div><div class="num"><span id="score">0</span><span class="small"> 点</span></div><div class="small" id="streak">連続ヒット 0</div></div><div class="panel right"><div class="label">⚾ 10球チャレンジ</div><div class="num"><span id="remain">10</span><span class="small"> 球のこり</span></div><div class="small" id="count">HIT 0 ・ HR 0</div></div></section>
+<div class="pitchBadge" id="pitchBadge">球種：準備中</div><div class="nav"><button id="sound">🔊</button><button id="restart">↻</button></div>
+<div id="outcome" class="outcome"></div>
+<div class="bottom"><div class="hint" id="hint">ボールが<br>大きくなったら<br>タップ！</div><button id="swing" class="swing">⚾<br>スイング！</button><span class="version">MARUGETTA BASEBALL · V14.1 SOUND EFFECTS</span></div>
+<div id="veil" class="veil"><div class="dialog"><span class="pill">⚾ 2.5D BATTING GAME · VER.14.6</span><img class="poster" src="assets/image_png_1.png" alt="日本シリーズへ！ マルゲッタちゃん VS ハムスター タイトルビジュアル"><div class="difficulty"><label for="difficulty">難易度</label><select id="difficulty"><option value="easy">初級</option><option value="normal" selected>中級 ★</option><option value="hard">上級</option></select></div><h1 id="headline">マルゲッタちゃん<br>ホームランチャレンジ</h1><div id="description"><strong>マルゲッタちゃん VS ハムスター投手</strong>。<br>10球チャレンジでタイミングを合わせて、ヒット＆ホームランを狙おう！<br>下の「プレイ開始！」からそのまま球場画面へ進みます。</div><button id="start">▶ プレイ開始！</button></div></div>
+<audio id="resultCheer" preload="auto" src="assets/audio_wav_1.wav"></audio></main>
+<script>
+(()=>{'use strict';
+const ASSETS={"batterIdle": "assets/image_png_2.png","batterSwing": "assets/image_png_3.png", "batterHomer": "assets/image_webp_1.webp", "tigerWindup": "assets/image_png_4.png", "tigerFollow": "assets/image_png_5.png"};
+const cv=document.getElementById('screen'),g=cv.getContext('2d'); g.imageSmoothingEnabled=true; try{g.imageSmoothingQuality='high'}catch(e){}
+const W=cv.width,H=cv.height,$=id=>document.getElementById(id);
+let difficulty='normal',fouls=0,combo=0,hitFreeze=0,ring=0,imgs={},mode='intro',shots=10,score=0,hits=0,homers=0,streak=0,best=0,mute=false,last=0,clock=0,pitch=null,recover=0,bannerEnd=0,cameraShake=0,flash=0,batTimer=0,cheerTimer=0,hitBall=null,particles=[];
+try{best=Number(localStorage.getItem('maru_v14_7_best')||localStorage.getItem('maru_v14_6_best')||localStorage.getItem('maru_v14_3_best')||0)}catch(e){}
+const random=(a,b)=>a+Math.random()*(b-a),clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),ease=t=>t*t*(3-2*t);
+function loadImage(src){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=src;})}
+function label(txt,x,y,size=18,color='#fff',stroke){g.font=`900 ${size}px system-ui,sans-serif`;g.textAlign='center';g.textBaseline='middle';if(stroke){g.strokeStyle=stroke;g.lineWidth=4;g.strokeText(txt,x,y)}g.fillStyle=color;g.fillText(txt,x,y)}
+function capsule(x,y,w,h,r,color){g.fillStyle=color;g.beginPath();g.roundRect(x,y,w,h,r);g.fill()}
+function oval(x,y,rx,ry,color,ang=0){g.beginPath();g.ellipse(x,y,rx,ry,ang,0,Math.PI*2);g.fillStyle=color;g.fill()}
+function poly(pts,color){g.beginPath();g.moveTo(...pts[0]);for(let i=1;i<pts.length;i++)g.lineTo(...pts[i]);g.closePath();g.fillStyle=color;g.fill()}
+function seg(x1,y1,x2,y2,w,color){g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.lineWidth=w;g.lineCap='round';g.strokeStyle=color;g.stroke()}
+function drawSprite(im,cx,cy,w,rot=0,alpha=1,flip=false){if(!im)return; const h=w*(im.height/im.width); g.save(); g.translate(cx,cy); if(flip) g.scale(-1,1); g.rotate(rot); g.globalAlpha=alpha; g.drawImage(im,-w/2,-h/2,w,h); g.restore(); return h;}
+function ball(x,y,r,a=1){g.save();g.globalAlpha=a;
+ if(pitchBallImage.complete&&pitchBallImage.naturalWidth){g.drawImage(pitchBallImage,x-r,y-r,2*r,2*r)}
+ else{oval(x,y,r,r,'#fffaf3');g.beginPath();g.arc(x,y,r*.67,-1.2,1.32);g.lineWidth=Math.max(1.4,r*.14);g.strokeStyle='#c73a31';g.stroke()}
+ g.restore()}
+function sound(f=440,t=.14,type='triangle',vol=.06){if(mute)return; try{const ac=window._maruAudio||(window._maruAudio=new (window.AudioContext||window.webkitAudioContext)()); const osc=ac.createOscillator(), amp=ac.createGain(); osc.type=type; osc.frequency.setValueAtTime(f,ac.currentTime); osc.frequency.exponentialRampToValueAtTime(Math.max(65,f*.55),ac.currentTime+t); amp.gain.setValueAtTime(vol,ac.currentTime); amp.gain.exponentialRampToValueAtTime(.001,ac.currentTime+t); osc.connect(amp); amp.connect(ac.destination); osc.start(); osc.stop(ac.currentTime+t); }catch(e){}}
+// Arcade baseball sound design: synthesized locally, no network/files required.
+let crowdBuffers=null;
+function audioContext(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;const ac=window._maruAudio||(window._maruAudio=new AC());if(ac.state==='suspended')ac.resume().catch(()=>{});return ac}catch(e){return null}}
+function tone(ac,start,f,duration,vol=.12,type='sine',endF=f){const o=ac.createOscillator(),v=ac.createGain();o.type=type;o.frequency.setValueAtTime(Math.max(30,f),start);o.frequency.exponentialRampToValueAtTime(Math.max(30,endF),start+duration);v.gain.setValueAtTime(.001,start);v.gain.exponentialRampToValueAtTime(Math.max(.002,vol),start+.006);v.gain.exponentialRampToValueAtTime(.001,start+duration);o.connect(v);v.connect(ac.destination);o.start(start);o.stop(start+duration+.02)}
+function noise(ac,start,duration,vol=.07,filter='highpass',cutoff=1200){const len=Math.ceil(ac.sampleRate*duration),b=ac.createBuffer(1,len,ac.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1);const n=ac.createBufferSource(),f=ac.createBiquadFilter(),v=ac.createGain();n.buffer=b;f.type=filter;f.frequency.value=cutoff;v.gain.setValueAtTime(.001,start);v.gain.linearRampToValueAtTime(vol,start+.015);v.gain.exponentialRampToValueAtTime(.001,start+duration);n.connect(f);f.connect(v);v.connect(ac.destination);n.start(start);n.stop(start+duration+.005)}
+function sfx(kind){if(mute)return;const ac=audioContext();if(!ac)return;const t=ac.currentTime+.009;
+ if(kind==='swing'){noise(ac,t,.16,.105,'bandpass',1400);tone(ac,t,420,.13,.044,'sawtooth',105)}
+ else if(kind==='miss'){noise(ac,t,.19,.075,'lowpass',850);tone(ac,t,170,.14,.045,'triangle',76)}
+ else if(kind==='hit'||kind==='homer'||kind==='foul'){
+   const big=kind==='homer',foul=kind==='foul';
+   noise(ac,t,foul?.07:.11,foul?.10:.19,'highpass',1900);
+   tone(ac,t,foul?1350:1550,foul?.16:big?.83:.42,foul?.065:big?.17:.13,'sine',foul?1060:big?910:1120);
+   tone(ac,t,foul?2320:2670,foul?.11:big?.73:.36,foul?.037:big?.095:.067,'sine',foul?2000:big?1840:2230);
+   tone(ac,t,foul?3600:3900,foul?.065:big?.44:.24,.025,'triangle',foul?2900:3000);
+   if(big){tone(ac,t+.07,810,.7,.055,'sine',620);noise(ac,t+.11,.23,.025,'bandpass',2100)}
+ }
+ else if(kind==='cheer'){
+   // Stadium cheers: many layered voices plus rhythmic hand-claps, 2.8s decay.
+   noise(ac,t,2.8,.09,'bandpass',610);
+   noise(ac,t+.10,2.3,.05,'bandpass',1550);
+   for(let i=0;i<25;i++){const tt=t+.02+Math.random()*1.6;const f=170+Math.random()*340;tone(ac,tt,f,.34+Math.random()*.45,.004+Math.random()*.006,'triangle',f*(.76+Math.random()*.4))}
+   for(let i=0;i<22;i++){const tt=t+.08+i*.095+Math.random()*.04;noise(ac,tt,.045+Math.random()*.035,.13,'highpass',1500)}
+ }
+}
+function updateHud(){$('score').textContent=score; $('remain').textContent=shots; $('count').textContent=`HIT ${hits} ・ HR ${homers} ・ F ${fouls}`; $('streak').textContent=`連続ヒット ${streak} ｜ BEST ${best}`;}
+function banner(title,sub='',ms=1100){$('outcome').innerHTML=title+(sub?`<small>${sub}</small>`:''); $('outcome').classList.add('visible'); bannerEnd=performance.now()+ms;}
+function clearBanner(){$('outcome').classList.remove('visible')}
+const stageImage=new Image();stageImage.src="assets/image_jpeg_1.jpg";
+const pitchBallImage=new Image();pitchBallImage.src="assets/image_webp_2.webp";
+function field(){
+ // Use the uploaded stadium artwork as the background for the entire gameplay screen,
+ // including the upper HUD area.
+ g.fillStyle='#58b2ff';
+ g.fillRect(0,0,450,800);
+ if(stageImage.complete && stageImage.naturalWidth){
+   // Draw the provided image across the full game canvas.
+   g.drawImage(stageImage,0,0,stageImage.naturalWidth,stageImage.naturalHeight,0,0,450,800);
+ } else {
+   g.fillStyle='#243849';
+   g.fillRect(0,0,450,800);
+ }
+ // strike zone overlay only
+ g.strokeStyle='#ffffffe0';g.lineWidth=2.5;g.strokeRect(189,595,73,83);
+ for(let i=1;i<3;i++){
+   seg(189+i*24.33,595,189+i*24.33,678,1,'#ffffff77');
+   seg(189,595+i*27.67,262,595+i*27.67,1,'#ffffff77');
+ }
+}
+function drawTiger(t){
+  const baseX=235,baseY=478;
+  let rot=Math.sin(t*2.0)*.01,bob=Math.sin(t*2.0)*1.5,width=103,dx=0,stretch=1;
+  let sprite=imgs.tigerWindup;
+  if(mode==='windup'){
+    const u=clamp(1-recover/590,0,1);
+    sprite=imgs.tigerWindup;
+    if(u<.26){const e=ease(u/.26);rot=-.03-.11*e;bob=-2*e;dx=-2*e;}
+    else if(u<.68){const e=ease((u-.26)/.42);rot=-.14-.18*e;bob=-2-10*e;dx=-2-7*e;}
+    else {const e=ease((u-.68)/.32);rot=-.32+.50*e;bob=-12+11*e;dx=-9+16*e;}
+    width=105+3*Math.sin(u*Math.PI);
+  }else if(mode==='pitch'&&pitch){
+    const p=clamp(pitch.progress,0,1);
+    // Keep the pitcher in the throwing/follow-through pose for most of the pitch
+    // so the ball feels like it was actually released from the hand.
+    if(p<.08){
+      sprite=imgs.tigerWindup;
+      const e=ease(clamp(p/.08,0,1));
+      rot=.02-.18*e; dx=3-10*e; bob=-2+4*e; width=105-3.4*e; stretch=1+.03*(1-e);
+    } else {
+      sprite=imgs.tigerFollow;
+      const e=ease(clamp((p-.08)/.92,0,1));
+      rot=.16+.04*(1-e); dx=6+2*Math.sin(e*Math.PI*.6); bob=-1.5+1.2*Math.sin(e*Math.PI*.5); width=103; stretch=1-.01*e;
+    }
+  }else if(mode==='recover'){
+    sprite=imgs.tigerFollow;
+    rot=.14*Math.exp(-Math.max(0,1300-recover)/360);
+    dx=5; width=103; bob=-1;
+  }
+  oval(baseX+dx,491,21,5,'#13271c55');
+  g.save();
+  g.translate(baseX+dx,baseY+bob);
+  g.scale(1,stretch);
+  g.rotate(rot);
+  if(sprite){
+    const h=width*sprite.height/sprite.width;
+    g.drawImage(sprite,-width/2,-h/2,width,h);
+  }
+  g.restore();
+  // Release trail stays visible a little longer to connect the hand to the ball.
+  if(mode==='pitch'&&pitch&&pitch.progress<.30){
+    const a=1-pitch.progress/.30;
+    for(let i=0;i<4;i++)seg(247+i*3,426+i*6,261+i*5,418+i*8,2.1,`rgba(255,247,194,${a*(.55-.08*i)})`);
+  }
+}
+function drawBatter(t){
+  // Batter enlarged to 1.25x while keeping the general balance on the batter box.
+  const bx=90,by=620;
+  const idleBob=Math.sin(t*1.8)*0.8;
+  let sprite=imgs.batterIdle,width=157,rot=-.02+Math.sin(t*1.4)*.0025,dy=idleBob,dx=0;
+  if(batTimer>0){
+    const p=clamp(1-batTimer,0,1);
+    if(p<.18){let e=ease(p/.18); sprite=imgs.batterIdle; width=158; rot=-.035-.02*e; dx=-1*e; dy=1+1.5*e;}
+    else if(p<.58){let e=ease((p-.18)/.40); sprite=imgs.batterSwing; width=170; rot=-.045+.17*e; dx=2+7*e; dy=-1-5.5*Math.sin(e*Math.PI*.72);} 
+    else if(p<.82){let e=ease((p-.58)/.24); sprite=imgs.batterSwing; width=168; rot=.11-.04*e; dx=9+3*e; dy=-5+2.5*e;}
+    else {let e=ease((p-.82)/.18); sprite=imgs.batterIdle; width=158; rot=.07*(1-e); dx=6*(1-e); dy=-1.5*(1-e);}    
+  }
+  if(cheerTimer>0){sprite=imgs.batterHomer;width=164;rot=-.01+Math.sin(t*6)*.008;dy=-6*Math.sin((1-cheerTimer)*Math.PI);dx=3;}
+  // soft floor shadow under the feet
+  g.save();
+  g.globalAlpha=.22;
+  oval(bx+4,721,47,10,'#000000');
+  g.globalAlpha=.12;
+  oval(bx+7,726,62,13,'#000000');
+  g.restore();
+  for(const [ox,oy,a] of [[2,4,.10],[-1,0,.08],[1,0,.08],[0,-1,.06],[0,1,.06]]) drawSprite(sprite,bx+dx+ox,by+dy+oy,width,rot,a,false);
+  drawSprite(sprite,bx+dx,by+dy,width,rot,1,false);
+  if(batTimer>0){
+    const p=1-batTimer;
+    if(p>.34&&p<.57){
+      const strength=Math.sin((p-.34)/.23*Math.PI);
+      g.save();g.globalAlpha=.22*strength;
+      g.strokeStyle='#ffef87';g.lineWidth=8.3*strength;g.lineCap='round';
+      g.beginPath();g.arc(bx+34,by-10,63,-1.95,-.30);g.stroke();
+      g.strokeStyle='#fff';g.lineWidth=2*strength;g.stroke();g.restore();
+    }
+  }
+}
+const TYPES={straight:{name:'ストレート',speed:1,bend:0},curve:{name:'カーブ',speed:1.11,bend:1},fork:{name:'フォーク',speed:1.04,bend:2},fast:{name:'豪速球',speed:.74,bend:0}};
+function startPitch(){if(shots<=0)return finish();mode='windup';const options=difficulty==='easy'?['straight','straight','curve']:difficulty==='hard'?['fast','fast','curve','fork','straight']:['straight','straight','curve','fork','fast'];const type=options[Math.floor(Math.random()*options.length)],cfg=TYPES[type],base=difficulty==='easy'?1470:difficulty==='hard'?1010:1200;pitch={type,name:cfg.name,duration:base*cfg.speed*random(.94,1.09),bend:random(-1,1)* (cfg.bend?52:14),drift:random(-8,8),start:0,progress:0,taken:false,ideal:type==='fork'?.97:type==='fast'?.87:.9};recover=590;$('pitchBadge').textContent='球種：'+cfg.name;$('hint').innerHTML='ハムスター投手が<br>構えた！ フォームを<br>見よう';}
+function play(){const resultSound=$('resultCheer');resultSound.pause();try{resultSound.currentTime=0}catch(e){}const bgm=$('gameBgm');bgm.pause();try{bgm.currentTime=0}catch(e){}bgm.volume=0.49;bgm.muted=mute;bgm.play().catch(e=>console.warn('BGM playback:',e));$('veil').querySelector('.dialog').classList.remove('result-screen');difficulty=$('difficulty').value;mode='ready';shots=10;score=hits=homers=streak=fouls=combo=0;particles=[];hitBall=null;batTimer=0;cheerTimer=0;flash=0;cameraShake=0;ring=0;clearBanner();$('veil').classList.add('hide');$('headline').innerHTML='マルゲッタちゃん<br>ホームランチャレンジ';$('start').textContent='▶ プレイ開始';updateHud();startPitch();}
+function emitBurst(count=34){for(let i=0;i<count;i++)particles.push({x:225,y:610,vx:random(-9,9),vy:random(-11,-1),life:random(.65,1.4),r:random(2,6),color:['#ffe34b','#fff','#ff8b2b','#ff4f19'][i%4]})}
+function swing(){if(!(mode==='pitch'&&pitch&&!pitch.taken))return;pitch.taken=true;shots--;batTimer=1;sfx('swing');const p=pitch.progress,delta=p-pitch.ideal,ad=Math.abs(delta),difficultyScale=difficulty==='easy'?1.35:difficulty==='hard'?.72:1;let name='STRIKE!',sub='タイミングを合わせよう',gain=0,hr=false;const hitWidth=.105*difficultyScale, foulWidth=.215*difficultyScale,homeWidth=.025*difficultyScale,contactWidth=.061*difficultyScale;
+if(ad<homeWidth){hr=true;hits++;homers++;streak++;gain=120+Math.max(0,streak-1)*15;name='HOME RUN!';sub=`PERFECT!! +${gain}点`;hitBall={start:performance.now(),travel:2200,hr:true,fromX:225+pitch.bend,fromY:655};cheerTimer=1;flash=.95;cameraShake=12;ring=1;emitBurst(120);sfx('homer')}
+else if(ad<hitWidth){hits++;streak++;gain=ad<contactWidth?55+5*(streak-1):25;name=ad<contactWidth?'NICE HIT!':'HIT!';sub=`+${gain}点`;hitBall={start:performance.now(),travel:1250,hr:false,fromX:225+pitch.bend,fromY:655};cameraShake=5;ring=.6;emitBurst(38);sfx('hit')}
+else if(ad<foulWidth){fouls++;streak=0;name='FOUL!';sub=delta<0?'振りが早い！':'振り遅れ！';cameraShake=2;emitBurst(12);sfx('foul')}else{streak=0;sub=delta<0?'早すぎる！':'遅すぎる！';sfx('miss')}
+score+=gain;mode='recover';recover=hr?2500:1300;banner(name,sub,hr?2100:950);updateHud();}
+function finish(){if(mode==='finished')return;const bgm=$('gameBgm');bgm.pause();try{bgm.currentTime=0}catch(e){}if(!mute){const cheer=$('resultCheer');try{cheer.pause();cheer.loop=false;cheer.currentTime=0;cheer.volume=.9;cheer.play().catch(()=>{});}catch(e){}}mode='finished'; if(score>best){best=score; try{localStorage.setItem('maru_v14_7_best',best)}catch(e){} } updateHud(); $('veil').classList.remove('hide'); $('veil').querySelector('.dialog').classList.add('result-screen'); $('headline').innerHTML=homers>=5?'🎊 おめでとう！':'チャレンジ終了！'; const finishedAt=new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date()); const levelName=({easy:'初級',normal:'中級',hard:'上級'})[difficulty]||'中級'; const rewardMap={ easy:{name:'バゲットプレゼント！',plain:'バゲットプレゼント',image:`assets/image_png_6.png`}, normal:{name:'ドリンクプレゼント！',plain:'ドリンクプレゼント',image:`assets/image_png_7.png`}, hard:{name:'明太フランスプレゼント！',plain:'明太フランスプレゼント',image:`assets/image_png_8.png`} }; const reward=rewardMap[difficulty]||rewardMap.normal; const rewardHtml = homers >= 5 ? `<div class="rewardWrap"><div class="rewardSparkles">✨🎉✨</div><div class="rewardWin">🎁 プレゼント獲得！</div><div class="rewardSub">ホームラン5本以上達成！<br>${reward.name}</div><img class="rewardPop" src="${reward.image}" alt="${reward.plain}"><div class="rewardScreenshot">この画面をスクショして<br>スタッフに見せてください。</div></div>` : `<div class="rewardGuide">あと <strong>${Math.max(0,5-homers)}</strong> 本で<br>${reward.plain}！</div>`; $('description').innerHTML=`<strong style="color:#ffe46e;font-size:32px">${score} 点</strong><br>ヒット ${hits} 本 / ホームラン ${homers} 本 / ファウル ${fouls} 球<br>ベストスコア ${best} 点<br><div class="resultMeta"><span>📅 ${finishedAt}（日本時間）</span><span>⚾ 難易度：${levelName}</span></div>${rewardHtml}`; $('start').textContent='▶ もう一度プレイ'; }
+function ballCoords(p){const e=clamp(p,0,1),z=e*e,curve=(pitch.type==='curve'?pitch.bend*Math.pow(e,2.6):0),drop=(pitch.type==='fork'?Math.pow(Math.max(0,(e-.60)/.40),2)*72:0),startX=251,startY=430,targetX=225+pitch.drift*0.52,targetY=636;const x=startX+(targetX-startX)*z+curve,y=startY+(targetY-startY)*(0.14*e+0.86*z)-9*Math.sin(Math.PI*e)+drop;return{x,y,r:(5.5+22*z)*0.6}}
+function drawBall(){if(mode==='pitch'&&pitch){const p=pitch.progress;for(let i=3;i>0;i--){const q=clamp(p-i*.043,0,1),pos=ballCoords(q);ball(pos.x,pos.y,pos.r,.075)}const pos=ballCoords(p);if(p>.69){g.strokeStyle=`rgba(255,225,83,${.35+Math.sin(clock*15)*.18})`;g.lineWidth=3;g.strokeRect(189,595,73,83)}ball(pos.x,pos.y,pos.r)}
+if(hitBall){const e=clamp((performance.now()-hitBall.start)/hitBall.travel,0,1),rise=hitBall.hr?790:280,drift=hitBall.hr?230:95,x=hitBall.fromX+Math.sin(e*2)*drift*e,y=hitBall.fromY-rise*Math.sin(e*Math.PI*.76)-70*e;ball(x,y,Math.max(2,25*(1-e)),1-e*.3);if(hitBall.hr){for(let j=0;j<5;j++)oval(x+random(-32,32),y+random(-28,28),random(2,5),random(2,5),'#ffef7d99')}if(e>=1)hitBall=null}}
+function extraEffects(){if(ring>0){g.save();g.strokeStyle=`rgba(255,236,91,${ring})`;g.lineWidth=8*(1-ring)+2;g.beginPath();g.arc(225,628,(1-ring)*200+12,0,Math.PI*2);g.stroke();g.restore()}if(cheerTimer>0){const t=1-cheerTimer;for(let i=0;i<32;i++){const theta=i*Math.PI*2/32+t*.6,r=110+175*t;oval(225+Math.cos(theta)*r,350+Math.sin(theta)*r*.8,4+3*cheerTimer,4+3*cheerTimer,['#ffe44d','#fff7b9','#ff8c26'][i%3])}if(cheerTimer>.72)label('★ PERFECT ★',225,232,26,'#fff4a0','#ad4716')}}
+function drawParticles(){ for(const p of particles){ g.globalAlpha=clamp(p.life,0,1); oval(p.x,p.y,p.r,p.r,p.color); } g.globalAlpha=1; }
+function render(){ g.clearRect(0,0,W,H); g.save(); if(cameraShake>0) g.translate(random(-cameraShake,cameraShake), random(-cameraShake,cameraShake)); field(); drawTiger(clock); drawBall(); drawBatter(clock); drawParticles(); extraEffects(); if(flash>0){ g.fillStyle=`rgba(255,236,140,${flash*.25})`; g.fillRect(0,0,W,H); } g.restore(); }
+function tick(ts){ const dt=Math.min(45, ts-(last||ts)); last=ts; clock+=dt/1000;
+  if(mode==='windup'){ recover-=dt; if(recover<=0){ mode='pitch'; pitch.start=ts; $('hint').innerHTML='いまだ！<br>ボールが手前に<br>来たらタップ！'; } }
+  if(mode==='pitch'&&pitch){ pitch.progress=(ts-pitch.start)/pitch.duration; if(pitch.progress>1.08 && !pitch.taken){ pitch.taken=true; shots--; streak=0; mode='recover'; recover=1050; banner('見逃し！','ボールをよく見て！',900); sound(180,.12); updateHud(); } }
+  if(mode==='recover'){ recover-=dt; if(recover<=0){ clearBanner(); startPitch(); } }
+  if(batTimer>0) batTimer=Math.max(0, batTimer-dt/350);
+  if(cheerTimer>0) cheerTimer=Math.max(0, cheerTimer-dt/780);
+  if(cameraShake>0) cameraShake=Math.max(0, cameraShake-dt/30);
+  if(flash>0) flash=Math.max(0, flash-dt/300); if(ring>0) ring=Math.max(0,ring-dt/550);
+  particles=particles.filter(p=>{ p.x+=p.vx*dt/16; p.y+=p.vy*dt/16; p.vy+=.24*dt/16; p.life-=dt/850; return p.life>0; });
+  if(bannerEnd && ts>bannerEnd){ bannerEnd=0; clearBanner(); }
+  try{render()}catch(err){if(!window._maruRenderWarned){console.error("描画エラー",err);window._maruRenderWarned=true}} requestAnimationFrame(tick); }
+  // Controls are registered immediately; images cannot block gameplay startup.
+  $('start').addEventListener('click', play);
+  $('restart').addEventListener('click', play);
+  $('swing').addEventListener('pointerdown', e=>{e.preventDefault();swing();});
+  cv.addEventListener('pointerdown', e=>{e.preventDefault();if(mode==='intro'||mode==='finished')return;swing();});
+  $('sound').addEventListener('click',()=>{mute=!mute;$('sound').textContent=mute?'🔇':'🔊';const bgm=$('gameBgm');bgm.muted=mute;if(!mute&&bgm.paused&&mode!=='intro'&&mode!=='finished')bgm.play().catch(()=>{});});
+  document.addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();if(mode==='intro'||mode==='finished')play();else swing();}});
+  updateHud();
+  // Decode images without a Promise.all bottleneck; a bad asset leaves the game playable.
+  for(const [k,v] of Object.entries(ASSETS)){
+    loadImage(v).then(im=>{imgs[k]=im;}).catch(e=>console.warn('画像が読み込めません:',k,e));
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
